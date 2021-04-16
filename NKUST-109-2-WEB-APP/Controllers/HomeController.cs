@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
+using NKUST_109_2_WEB_APP.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NKUST_109_2_WEB_APP.Models;
 using System;
@@ -32,6 +34,10 @@ namespace NKUST_109_2_WEB_APP.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public async Task<ActionResult> About()
+        {
+            return View();
         }
     }
 }

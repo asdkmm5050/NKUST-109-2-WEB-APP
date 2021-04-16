@@ -162,3 +162,4 @@ C:\Code\.net\NKUST-109-2-WEB-APP\NKUST-109-2-WEB-APP\obj\Debug\net5.0\Razor\View
 C:\Code\.net\NKUST-109-2-WEB-APP\NKUST-109-2-WEB-APP\obj\Debug\net5.0\Razor\Views\Hospitals\Details.cshtml.g.cs
 C:\Code\.net\NKUST-109-2-WEB-APP\NKUST-109-2-WEB-APP\obj\Debug\net5.0\Razor\Views\Hospitals\Edit.cshtml.g.cs
 C:\Code\.net\NKUST-109-2-WEB-APP\NKUST-109-2-WEB-APP\obj\Debug\net5.0\Razor\Views\Hospitals\Index.cshtml.g.cs
+C:\Code\.net\NKUST-109-2-WEB-APP\NKUST-109-2-WEB-APP\obj\Debug\net5.0\Razor\Views\Home\About.cshtml.g.cs
