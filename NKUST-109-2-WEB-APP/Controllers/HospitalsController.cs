@@ -81,7 +81,7 @@ namespace NKUST_109_2_WEB_APP.Controllers
         }
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Address,Telephone")]Hospital hospital)
+        public async Task<IActionResult> Create([Bind("Name,Address,Telephone")] Hospital hospital)
         {
             try
             {
@@ -100,23 +100,28 @@ namespace NKUST_109_2_WEB_APP.Controllers
             }
             return View(hospital);
         }
-        public ActionResult Edit()
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            var hospital = await _context.Hospitals
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+            return View(hospital);
         }
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> EditPost(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
             var hospitalToUpdate = await _context.Hospitals.FirstOrDefaultAsync(s => s.ID == id);
-            if (await TryUpdateModelAsync<Hospital>(
+#pragma warning disable HAA0101 // Array allocation for params parameter
+            if (await TryUpdateModelAsync(
                 hospitalToUpdate,
                 "",
                 s => s.Name, s => s.Address, s => s.Telephone))
+#pragma warning restore HAA0101 // Array allocation for params parameter
             {
                 try
                 {
@@ -132,6 +137,54 @@ namespace NKUST_109_2_WEB_APP.Controllers
                 }
             }
             return View(hospitalToUpdate);
+        }
+        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Hospitals
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Delete failed. Try again, and if the problem persists " +
+                    "see your system administrator.";
+            }
+
+            return View(student);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+#pragma warning disable HAA0101 // Array allocation for params parameter
+            var student = await _context.Hospitals.FindAsync(id);
+#pragma warning restore HAA0101 // Array allocation for params parameter
+            if (student == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                _context.Hospitals.Remove(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
     }
 }

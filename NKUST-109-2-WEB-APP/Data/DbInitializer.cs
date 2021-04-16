@@ -17,7 +17,7 @@ namespace NKUST_109_2_WEB_APP.Data
             {
                 return;   // DB has been seeded
             }
-            var reader = new StreamReader(File.OpenRead("C:\\Code\\.net\\NKUST-109-2-WEB-APP\\NKUST-109-2-WEB-APP\\data.csv"), System.Text.Encoding.Default);
+            var reader = new StreamReader(File.OpenRead("C:\\Users\\user\\Desktop\\C#\\NKUST-109-2-WEB-APP\\NKUST-109-2-WEB-APP\\data.csv"), System.Text.Encoding.Default);
             List<Hospital> hospitals = new();
             while (!reader.EndOfStream)
             {
