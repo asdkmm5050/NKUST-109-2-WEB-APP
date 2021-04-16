@@ -57,5 +57,81 @@ namespace NKUST_109_2_WEB_APP.Controllers
             int pageSize = 6;
             return View(await PaginatedList<Hospital>.CreateAsync(hospitals.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var hospital = await _context.Hospitals
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (hospital == null)
+            {
+                return NotFound();
+            }
+
+            return View(hospital);
+        }
+        public ActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Name,Address,Telephone")]Hospital hospital)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(hospital);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                    "Try again, and if the problem persists " +
+                    "see your system administrator.");
+            }
+            return View(hospital);
+        }
+        public ActionResult Edit()
+        {
+            return View();
+        }
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var hospitalToUpdate = await _context.Hospitals.FirstOrDefaultAsync(s => s.ID == id);
+            if (await TryUpdateModelAsync<Hospital>(
+                hospitalToUpdate,
+                "",
+                s => s.Name, s => s.Address, s => s.Telephone))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+            return View(hospitalToUpdate);
+        }
     }
 }
